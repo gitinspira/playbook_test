@@ -1,5 +1,5 @@
 - name: Crear ruta y archivo en la VM
-  hosts: all
+  hosts: mis_vms
   gather_facts: yes
 
   tasks:
@@ -13,7 +13,7 @@
       copy:
         content: "Este es un archivo de prueba"
         dest: /tmp/ejemplo/archivo.txt
-        force: no   # no sobreescribe si ya existe
+        force: no
 
     - name: Verificar si el archivo existe
       stat:
