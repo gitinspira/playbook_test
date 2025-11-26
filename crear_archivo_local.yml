@@ -1,22 +1,23 @@
-- name: Crear ruta y archivo local en el pod de Ansible
+---
+- name: Crear archivo local en el pod de Ansible
   hosts: localhost
   gather_facts: no
 
   tasks:
-    - name: Crear carpeta
+    - name: Crear carpeta /tmp/demo_folder
       file:
-        path: /tmp/ansible_demo
+        path: /tmp/demo_folder
         state: directory
 
-    - name: Crear archivo
+    - name: Crear archivo test.txt dentro de la carpeta
       copy:
         content: "¡Hola! Este archivo fue creado por Ansible."
-        dest: /tmp/ansible_demo/test.txt
+        dest: /tmp/demo_folder/test.txt
 
-    - name: Mostrar contenido del archivo
-      command: cat /tmp/ansible_demo/test.txt
+    - name: Verificar el contenido del archivo
+      command: cat /tmp/demo_folder/test.txt
       register: contenido
 
-    - name: Verificar contenido
+    - name: Mostrar contenido del archivo
       debug:
         var: contenido.stdout
