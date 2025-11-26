@@ -1,7 +1,6 @@
 - name: Listar pods en OpenShift
-  hosts: all
+  hosts: localhost
   gather_facts: no
-
   tasks:
     - name: Obtener pods del namespace 'default'
       kubernetes.core.k8s_info:
