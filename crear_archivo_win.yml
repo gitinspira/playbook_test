@@ -1,0 +1,23 @@
+- name: Crear ruta y archivo en Windows vía SSH
+  hosts: win10_hosts
+  gather_facts: no
+
+  tasks:
+    - name: Crear carpeta
+      file:
+        path: C:/temp/prueba
+        state: directory
+
+    - name: Crear archivo si no existe
+      copy:
+        content: "Este es un archivo de prueba"
+        dest: C:/temp/prueba/archivo.txt
+        force: no   # No sobrescribe si ya existe
+
+    - name: Mostrar contenido de la carpeta
+      command: dir C:/temp/prueba
+      register: salida
+
+    - name: Mostrar resultado
+      debug:
+        var: salida.stdout_lines
