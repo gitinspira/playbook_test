@@ -1,12 +1,12 @@
-- name: Listar namespaces en OpenShift
+- name: Listar pods en OpenShift
   hosts: localhost
   gather_facts: no
 
   tasks:
-    - name: Obtener namespaces
-      shell: oc get ns
-      register: namespaces
+    - name: Listar pods en el namespace default
+      shell: oc get pods -n default
+      register: pods
 
-    - name: Mostrar namespaces
+    - name: Mostrar resultado
       debug:
-        var: namespaces.stdout_lines
+        var: pods.stdout_lines
