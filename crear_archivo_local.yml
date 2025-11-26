@@ -3,21 +3,20 @@
   gather_facts: no
 
   tasks:
-    - name: Crear carpeta /tmp/demo_folder
+    - name: Crear carpeta
       file:
-        path: /tmp/demo_folder
+        path: /tmp/ansible_demo
         state: directory
 
-    - name: Crear archivo test.txt dentro de la carpeta
+    - name: Crear archivo
       copy:
-        dest: /tmp/demo_folder/test.txt
         content: "¡Hola! Este archivo fue creado por Ansible."
-        force: no  # No sobrescribe si ya existe
-
-    - name: Verificar el contenido del archivo
-      command: cat /tmp/demo_folder/test.txt
-      register: contenido
+        dest: /tmp/ansible_demo/test.txt
 
     - name: Mostrar contenido del archivo
+      command: cat /tmp/ansible_demo/test.txt
+      register: contenido
+
+    - name: Verificar contenido
       debug:
         var: contenido.stdout
