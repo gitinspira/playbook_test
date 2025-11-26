@@ -1,25 +1,22 @@
-- name: Crear ruta y archivo en la VM
-  hosts: mis_vms
-  gather_facts: yes
-
+- name: Crear ruta y archivo en Windows
+  hosts: win10
+  gather_facts: no
   tasks:
-    - name: Crear directorio /tmp/ejemplo si no existe
-      file:
-        path: /tmp/ejemplo
+
+    - name: Crear carpeta si no existe
+      win_file:
+        path: C:\PruebaAnsible
         state: directory
-        mode: '0755'
 
-    - name: Crear archivo archivo.txt si no existe
-      copy:
-        content: "Este es un archivo de prueba"
-        dest: /tmp/ejemplo/archivo.txt
-        force: no
+    - name: Crear archivo.txt si no existe
+      win_file:
+        path: C:\PruebaAnsible\archivo.txt
+        state: touch
 
-    - name: Verificar si el archivo existe
-      stat:
-        path: /tmp/ejemplo/archivo.txt
-      register: archivo_info
+    - name: Verificar contenido del archivo
+      win_shell: type C:\PruebaAnsible\archivo.txt
+      register: resultado
 
     - name: Mostrar resultado
       debug:
-        msg: "El archivo existe: {{ archivo_info.stat.exists }}"
+        var: resultado.stdout
