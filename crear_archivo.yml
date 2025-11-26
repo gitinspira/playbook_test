@@ -1,22 +1,14 @@
 - name: Crear ruta y archivo en Windows
   hosts: win10
   gather_facts: no
-  tasks:
 
-    - name: Crear carpeta si no existe
+  tasks:
+    - name: Crear carpeta
       win_file:
-        path: C:\PruebaAnsible
+        path: C:\Temp\MiCarpeta
         state: directory
 
-    - name: Crear archivo.txt si no existe
+    - name: Crear archivo si no existe
       win_file:
-        path: C:\PruebaAnsible\archivo.txt
+        path: C:\Temp\MiCarpeta\archivo.txt
         state: touch
-
-    - name: Verificar contenido del archivo
-      win_shell: type C:\PruebaAnsible\archivo.txt
-      register: resultado
-
-    - name: Mostrar resultado
-      debug:
-        var: resultado.stdout
