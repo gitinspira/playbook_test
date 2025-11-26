@@ -1,18 +1,13 @@
----
-- name: Ver versión de RHEL e IPs
+- name: Hostname y ip address
   hosts: all
-  gather_facts: true
+  gather_facts: yes
 
   tasks:
-
-    - name: Mostrar el hostname
+    - name: Mostrar hostname
       debug:
         msg: "Hostname: {{ ansible_hostname }}"
 
-    - name: Mostrar versión del sistema operativo
+    - name: Mostrar IP principal
       debug:
-        msg: "OS: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+        msg: "IP address: {{ ansible_default_ipv4.address }}"
 
-    - name: Mostrar dirección IP principal
-      debug:
-        msg: "IP: {{ ansible_default_ipv4.address }}"
