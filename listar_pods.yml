@@ -1,5 +1,5 @@
-- name: Listar pods en un namespace de OpenShift
-  hosts: localhost
+- name: Listar pods en OpenShift
+  hosts: all
   gather_facts: no
 
   tasks:
