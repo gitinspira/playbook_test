@@ -1,24 +1,26 @@
 ---
-- name: Listar pods con credencial de OpenShift (Bearer Token)
+- name: Listar pods con autenticación usando credencial de OpenShift
   hosts: localhost
   gather_facts: false
   collections:
     - kubernetes.core
 
-  vars:
-    namespace: default
-
   tasks:
-    - name: Obtener pods del namespace {{ namespace }}
-      k8s_info:
-        api_key: "{{ openshift_token }}"
+    - name: Autenticarse con OpenShift usando credencial
+      k8s_auth:
         host: "{{ openshift_host }}"
+        api_key: "{{ openshift_api_key }}"
         verify_ssl: false
+      register: auth
+
+    - name: Obtener pods del namespace default
+      k8s_info:
         api_version: v1
         kind: Pod
-        namespace: "{{ namespace }}"
+        namespace: default
+        kubeconfig: "{{ auth.kubeconfig }}"
       register: resultado
 
-    - name: Mostrar lista de pods encontrados
+    - name: Mostrar lista de pods
       debug:
         msg: "{{ resultado.resources | map(attribute='metadata.name') | list }}"
