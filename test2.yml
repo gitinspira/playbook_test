@@ -1,0 +1,15 @@
+- name: List pods cleanly
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Get pods in AAP namespace
+      kubernetes.core.k8s_info:
+        kind: Pod
+        namespace: ansible-automation-platform
+      register: pods
+
+    - name: Show pod names
+      debug:
+        msg: "{{ item.metadata.name }}"
+      loop: "{{ pods.resources }}"
