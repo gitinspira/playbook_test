@@ -1,0 +1,16 @@
+---
+- name: Listar nombres de pods en un proyecto de OpenShift
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Obtener lista de pods
+      kubernetes.core.k8s_info:
+        kind: Pod
+        namespace: "{{ oc_namespace }}"
+      register: pod_list
+
+    - name: Mostrar solo nombres de los pods
+      debug:
+        msg: "{{ item.metadata.name }}"
+      loop: "{{ pod_list.resources }}"
