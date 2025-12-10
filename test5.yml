@@ -1,0 +1,43 @@
+---
+- name: Create a namespace and a pod in OpenShift and list pods
+  hosts: localhost
+  gather_facts: no
+  vars:
+    namespace_name: demo-namespace
+    pod_name: demo-pod
+    pod_image: busybox
+    pod_command: ["sleep", "3600"]
+
+  tasks:
+    - name: Ensure the namespace exists
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: "{{ namespace_name }}"
+        state: present
+
+    - name: Ensure the demo pod exists
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: "{{ pod_name }}"
+            namespace: "{{ namespace_name }}"
+          spec:
+            containers:
+              - name: "{{ pod_name }}"
+                image: "{{ pod_image }}"
+                command: "{{ pod_command }}"
+
+    - name: Get all pods in the namespace
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Pod
+        namespace: "{{ namespace_name }}"
+      register: pod_list
+
+    - name: Show only pod names
+      debug:
+        msg: "{{ pod_list.resources | map(attribute='metadata.name') | list }}"
