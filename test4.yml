@@ -1,0 +1,14 @@
+- name: List only pod names in OpenShift
+  hosts: localhost
+  gather_facts: false
+  tasks:
+
+    - name: Get pods in AAP namespace
+      kubernetes.core.k8s_info:
+        kind: Pod
+        namespace: ansible-automation-platform
+      register: pod_list
+
+    - name: Show only pod names
+      debug:
+        msg: "{{ pod_list.resources | map(attribute='metadata') | map(attribute='name') | list }}"
