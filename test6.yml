@@ -1,0 +1,40 @@
+---
+- name: Create a pod in existing namespace and list pod names
+  hosts: localhost
+  gather_facts: false
+  vars:
+    namespace_name: ansible-automation-platform
+    pod_name: demo-pod
+    pod_image: busybox
+
+  tasks:
+
+    - name: Ensure the pod exists
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: "{{ pod_name }}"
+            namespace: "{{ namespace_name }}"
+          spec:
+            containers:
+              - name: "{{ pod_name }}"
+                image: "{{ pod_image }}"
+                command: ["sleep", "3600"]
+      register: pod_result
+
+    - name: Debug pod creation
+      debug:
+        msg: "Pod '{{ pod_name }}' created or already exists."
+
+    - name: List pods in the namespace
+      kubernetes.core.k8s_info:
+        kind: Pod
+        namespace: "{{ namespace_name }}"
+      register: pod_list
+
+    - name: Show only pod names
+      debug:
+        msg: "{{ pod_list.resources | map(attribute='metadata.name') | list }}"
